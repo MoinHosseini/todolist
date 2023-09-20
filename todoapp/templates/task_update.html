@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load jalali_tags %}
+{% block title %}Update Task{% endblock %}
+{% block content %}
+    <h2>Update Task</h2>
+    <link rel="stylesheet" href="{% static 'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css' %}">
+    <script src="{% static 'admin/js/django_jalali.min.js' %}"></script>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Update</button>
+    </form>
+    <link rel="stylesheet" type="text/css" href="{% static 'uc.css' %}">
+{% endblock %}

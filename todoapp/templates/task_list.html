@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static custom_filters %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+    <h2>Task List</h2>
+    <ul class="task-list">
+        <div class="create-task-button">
+            <a href="{% url 'task_create' %}" class="create-button">Create New Task</a>
+        </div>
+        <div class="filter-buttons">
+            <a href="?filter=all">All</a>
+            <a href="?filter=uncompleted">Uncompleted</a>
+            <a href="?filter=completed">Completed</a>
+        </div>
+        
+        {% for task in tasks %}
+            <li class="task-item" style="background-color: {% if task.completed %}#4ef583{% else %}#f79798{% endif %}">
+                <a href="{% url 'task_detail' task.id %}">
+                    <h3 class="task-title">{{ task.title }}</h3>
+                </a>
+                <p class="task-description">{{ task.description }}</p>
+                <p class="task-dates">Created At: {{ task.created_at }} | {% if task.completed %}Completed At: {{ task.completed_at }}{% else %}Not Completed{% endif %}</p>
+                {% if not task.completed and task.deadline %}
+                    <p class="task-deadline">Deadline: {{ task.deadline }} | Days Left: {{ task.deadline|days_left }}</p>
+                {% endif %}
+                <div class="task-actions">
+                    <div class="left-actions">
+                        <form action="{% url 'complete_task' task.id %}" method="post">
+                            {% csrf_token %}
+                            <button class='toggle-completion' type="submit">Change Status</button>
+                        </form>
+                    </div>
+                    <div class="right-actions">
+                        <a href="{% url 'task_update' task.id %}">Edit</a>
+                        <a href="{% url 'task_delete' task.id %}">Delete</a>
+                    </div>
+                </div>
+            </li>
+        {% empty %}
+            <p>No tasks available.</p>
+        {% endfor %}
+    </ul>
+    {% comment %} <a href="{% url 'send-email' %}">Send mail</a> {% endcomment %}
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+{% endblock %}

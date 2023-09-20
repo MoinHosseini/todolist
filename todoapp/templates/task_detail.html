@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Task Detail{% endblock %}
+
+{% block content %}
+    <div class="task-detail">
+        <h2>Task Detail</h2>
+        <h3>{{ task.title }}</h3>
+        <p>{{ task.description }}</p>
+        <p>Created At: {{ task.created_at }}</p>
+        {% if task.completed %} <p>Completed At: {{ task.completed_at }} </p>{% endif %}
+        
+        <div class="task-status">
+            {% if task.completed %}
+                <span class="completed">Status: Completed</span>
+            {% else %}
+                <span class="not-completed">Status: Not Completed</span>
+            {% endif %}
+                <form action="{% url 'complete_task' task.id %}" method="post">
+                    {% csrf_token %}
+                    <button class='toggle-completion' type="submit">Change Status</button>
+                </form>
+        </div>
+    </div>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'detail.css' %}">
+    
+{% endblock %}
